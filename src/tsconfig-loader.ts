@@ -12,6 +12,7 @@ export interface Tsconfig {
   extends?: string;
   compilerOptions?: {
     baseUrl?: string;
+    outDir?: string;
     paths?: { [key: string]: Array<string> };
     strict?: boolean;
   };
@@ -20,6 +21,7 @@ export interface Tsconfig {
 export interface TsConfigLoaderResult {
   tsConfigPath: string | undefined;
   baseUrl: string | undefined;
+  outDir: string | undefined;
   paths: { [key: string]: Array<string> } | undefined;
 }
 
@@ -51,12 +53,14 @@ function loadSyncDefault(cwd: string, filename?: string): TsConfigLoaderResult {
       tsConfigPath: undefined,
       baseUrl: undefined,
       paths: undefined,
+      outDir: undefined,
     };
   }
   const config = loadTsconfig(configPath);
 
   return {
     tsConfigPath: configPath,
+    outDir: config && config.compilerOptions && config.compilerOptions.outDir,
     baseUrl: config && config.compilerOptions && config.compilerOptions.baseUrl,
     paths: config && config.compilerOptions && config.compilerOptions.paths,
   };
